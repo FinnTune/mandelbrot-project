@@ -26,7 +26,7 @@ pyparsing==3.3.2
 python-dateutil==2.9.0.post0
 six==1.17.0
 stack-data==0.6.3
-traitlets==5.14.3
+traitlets==5.15.1
 wcwidth==0.8.1
 widgetsnbextension==4.0.15
 notebook
