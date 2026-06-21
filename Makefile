@@ -3,7 +3,7 @@ VENV ?= .venv
 PIP := $(VENV)/bin/pip
 PY := $(VENV)/bin/python
 
-.PHONY: venv install freeze clean-venv run-notebook run-lab
+.PHONY: venv install install-dev freeze clean-venv run-notebook run-lab test
 
 venv:
 	$(PYTHON) -m venv $(VENV)
@@ -11,6 +11,12 @@ venv:
 
 install: venv
 	$(PIP) install -r requirements.txt
+
+install-dev: install
+	$(PIP) install -r requirements-dev.txt
+
+test: install-dev
+	MPLBACKEND=Agg $(PY) -m pytest
 
 freeze:
 	$(PIP) freeze > requirements.txt

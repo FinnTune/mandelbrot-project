@@ -14,5 +14,13 @@ Thumbs.db
 __pycache__/
 *.pyc
 
+# Test and tooling artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local notebook execution output
+mandelbrot.executed.ipynb
+
 # Large data or outputs (optional)
 data/
