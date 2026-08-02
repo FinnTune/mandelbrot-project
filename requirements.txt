@@ -18,7 +18,7 @@ packaging==26.2
 parso==0.8.7
 pexpect==4.9.0
 pillow==12.3.0
-prompt_toolkit==3.0.52
+prompt_toolkit==3.0.53
 ptyprocess==0.7.0
 pure_eval==0.2.3
 Pygments==2.20.0
