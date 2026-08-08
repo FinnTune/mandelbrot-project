@@ -2,8 +2,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.colors import LogNorm
 
+try:
+    from numba import njit, prange
 
-def mandelbrot_set(xmin, xmax, ymin, ymax, width=800, height=600, max_iter=100):
+    _NUMBA_AVAILABLE = True
+except ImportError:
+    _NUMBA_AVAILABLE = False
+
+
+def _mandelbrot_set_numpy(xmin, xmax, ymin, ymax, width, height, max_iter):
     x = np.linspace(xmin, xmax, width)
     y = np.linspace(ymin, ymax, height)
     c = (x[:, None] + 1j * y[None, :]).ravel()
@@ -26,6 +33,44 @@ def mandelbrot_set(xmin, xmax, ymin, ymax, width=800, height=600, max_iter=100):
             break
 
     return divtime.reshape(width, height).T
+
+
+if _NUMBA_AVAILABLE:
+
+    @njit(parallel=True, cache=True)
+    def _mandelbrot_set_numba(xmin, xmax, ymin, ymax, width, height, max_iter):
+        divtime = np.full((height, width), max_iter, dtype=np.int64)
+        for i in prange(width):
+            cr = xmin if width == 1 else xmin + (xmax - xmin) * i / (width - 1)
+            for j in range(height):
+                ci = ymin if height == 1 else ymin + (ymax - ymin) * j / (height - 1)
+                zr = 0.0
+                zi = 0.0
+                for k in range(max_iter):
+                    zr, zi = zr * zr - zi * zi + cr, 2.0 * zr * zi + ci
+                    if zr * zr + zi * zi > 4.0:
+                        divtime[j, i] = k
+                        break
+        return divtime
+
+
+def mandelbrot_set(
+    xmin, xmax, ymin, ymax, width=800, height=600, max_iter=100, engine="numpy"
+):
+    if engine == "auto":
+        engine = "numba" if _NUMBA_AVAILABLE else "numpy"
+
+    if engine == "numba":
+        if not _NUMBA_AVAILABLE:
+            raise ImportError(
+                "engine='numba' requires the 'numba' package (pip install numba)"
+            )
+        return _mandelbrot_set_numba(xmin, xmax, ymin, ymax, width, height, max_iter)
+
+    if engine != "numpy":
+        raise ValueError(f"Unknown engine {engine!r}; expected 'numpy', 'numba', or 'auto'")
+
+    return _mandelbrot_set_numpy(xmin, xmax, ymin, ymax, width, height, max_iter)
 
 
 def plot_mandelbrot(
