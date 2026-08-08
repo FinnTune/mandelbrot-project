@@ -6,16 +6,26 @@ from matplotlib.colors import LogNorm
 def mandelbrot_set(xmin, xmax, ymin, ymax, width=800, height=600, max_iter=100):
     x = np.linspace(xmin, xmax, width)
     y = np.linspace(ymin, ymax, height)
-    c = x[:, None] + 1j * y[None, :]
+    c = (x[:, None] + 1j * y[None, :]).ravel()
     z = np.zeros_like(c)
     divtime = np.full(c.shape, max_iter, dtype=int)
 
+    # Track only still-active (non-escaped) points so later iterations do
+    # less work as more of the grid escapes, instead of touching every
+    # pixel on every pass.
+    active = np.arange(c.size)
     for i in range(max_iter):
-        mask = np.abs(z) <= 2
-        z[mask] = z[mask] ** 2 + c[mask]
-        divtime[mask & (np.abs(z) > 2)] = i
+        z_active = z[active] ** 2 + c[active]
+        z[active] = z_active
 
-    return divtime.T
+        escaped = np.abs(z_active) > 2
+        divtime[active[escaped]] = i
+
+        active = active[~escaped]
+        if active.size == 0:
+            break
+
+    return divtime.reshape(width, height).T
 
 
 def plot_mandelbrot(
