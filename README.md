@@ -83,6 +83,10 @@ python -m jupyter lab
 
 - The virtual environment directory `.venv/` is already ignored by git.
 - If interactive widgets do not render, restart the kernel and rerun all cells.
+- `mandelbrot_set(..., engine="numpy")` is the default and requires no extra
+  dependencies. Pass `engine="numba"` (or `"auto"`) for a large speedup on
+  deep zooms / high `max_iter`, after `pip install numba` — the first call
+  pays a one-time JIT compilation cost.
 
 ## License
 
