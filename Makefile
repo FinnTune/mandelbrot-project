@@ -14,6 +14,7 @@ install: venv
 
 install-dev: install
 	$(PIP) install -r requirements-dev.txt
+	$(VENV)/bin/nbstripout --install --attributes .gitattributes
 
 test: install-dev
 	MPLBACKEND=Agg $(PY) -m pytest
