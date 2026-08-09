@@ -87,6 +87,11 @@ python -m jupyter lab
   dependencies. Pass `engine="numba"` (or `"auto"`) for a large speedup on
   deep zooms / high `max_iter`, after `pip install numba` — the first call
   pays a one-time JIT compilation cost.
+- `make install-dev` registers [`nbstripout`](https://github.com/kynan/nbstripout)
+  as a git filter for this repo, so cell outputs and execution counts in
+  `mandelbrot.ipynb` are stripped automatically on `git add`/commit even if
+  you've run the notebook locally. Run `make install-dev` once after cloning
+  (or after deleting `.venv/`) to (re-)register it.
 
 ## License
 

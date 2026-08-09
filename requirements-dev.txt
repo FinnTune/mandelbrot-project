@@ -2,3 +2,4 @@ pytest
 nbconvert
 ipykernel
 numba
+nbstripout
