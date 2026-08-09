@@ -29,6 +29,7 @@ class ZoomableMandelbrot:
         max_iter=100,
         cmap="hot",
         engine="numpy",
+        smooth=False,
         figsize=(12, 8),
     ):
         self.initial_bounds = (xmin, xmax, ymin, ymax)
@@ -36,6 +37,7 @@ class ZoomableMandelbrot:
         self.max_iter = max_iter
         self.cmap = cmap
         self.engine = engine
+        self.smooth = smooth
 
         self.fig, self.ax = plt.subplots(figsize=figsize)
         self._image = None
@@ -55,7 +57,13 @@ class ZoomableMandelbrot:
     def _draw(self):
         xmin, xmax, ymin, ymax = self.bounds
         mandel = mandelbrot_set(
-            xmin, xmax, ymin, ymax, max_iter=self.max_iter, engine=self.engine
+            xmin,
+            xmax,
+            ymin,
+            ymax,
+            max_iter=self.max_iter,
+            engine=self.engine,
+            smooth=self.smooth,
         )
 
         if self._image is None:
@@ -66,9 +74,12 @@ class ZoomableMandelbrot:
                 cmap=self.cmap,
                 norm=LogNorm(),
             )
-            self.fig.colorbar(
-                self._image, ax=self.ax, label="Iteration count (log scale)"
+            label = (
+                "Smooth iteration count (log scale)"
+                if self.smooth
+                else "Iteration count (log scale)"
             )
+            self.fig.colorbar(self._image, ax=self.ax, label=label)
             self.ax.set_xlabel("Real axis")
             self.ax.set_ylabel("Imaginary axis")
         else:
@@ -104,8 +115,8 @@ def interactive_mandelbrot(**kwargs):
     """Display a live, click-and-drag zoomable Mandelbrot viewer.
 
     Mirrors plot_mandelbrot's keyword arguments (xmin, xmax, ymin, ymax,
-    max_iter, cmap) plus `engine` for mandelbrot_set. Requires an
-    interactive matplotlib backend (e.g. `%matplotlib widget` in Jupyter)
-    for the drag gestures to register.
+    max_iter, cmap, engine, smooth). Requires an interactive matplotlib
+    backend (e.g. `%matplotlib widget` in Jupyter) for the drag gestures
+    to register.
     """
     return ZoomableMandelbrot(**kwargs)

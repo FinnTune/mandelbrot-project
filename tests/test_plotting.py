@@ -15,3 +15,8 @@ def test_plot_mandelbrot_runs_without_error():
 def test_plot_mandelbrot_accepts_alternate_colormap():
     plot_mandelbrot(max_iter=10, cmap="viridis")
     plt.close("all")
+
+
+def test_plot_mandelbrot_accepts_smooth_coloring():
+    plot_mandelbrot(max_iter=10, smooth=True)
+    plt.close("all")
