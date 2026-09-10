@@ -29,5 +29,5 @@ six==1.17.0
 stack-data==0.6.3
 traitlets==5.16.1
 wcwidth==0.8.2
-widgetsnbextension==4.0.15
+widgetsnbextension==4.0.16
 notebook
