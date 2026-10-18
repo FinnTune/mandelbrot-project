@@ -9,7 +9,7 @@ ipympl==0.10.0
 ipython==9.17.1
 ipython_pygments_lexers==1.1.1
 ipywidgets==8.1.9
-jedi==0.20.0
+jedi==0.20.1
 jupyterlab_widgets==3.0.17
 kiwisolver==1.5.1
 matplotlib==3.11.2
